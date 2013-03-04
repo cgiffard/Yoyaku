@@ -6,7 +6,7 @@ Avoid callback hell with this ultra-simple wrapper for your functions.
 ### Example
 
 ```javascript
-var p = require("yakusoku");
+var p = require("yoyaku");
 
 var exists = promise(["exists","enoent"],existsInt);
 function existsInt(file,promises) {
@@ -17,6 +17,11 @@ function existsInt(file,promises) {
 		promises.exists(data);
 	});
 }
+
+
+exists("./foo.txt")
+	.exists(successFunc)
+	.enoent(failFunc);
 ```
 
 ### Installing

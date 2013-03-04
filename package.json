@@ -20,9 +20,13 @@
     "callbackhell",
     "hell"
   ],
+  "devDependencies": {
+    "mocha": "1.8.x",
+    "chai": "~1.5.0"
+  },
   "author": [
     "Christopher Giffard <christopher.giffard@cgiffard.com>",
-    "cgiffard <christopher.giffard@cgiffard.com>",
+    "cgiffard <christopher.giffard@cgiffard.com>"
   ],
   "license": "BSD"
 }
