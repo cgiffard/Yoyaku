@@ -8,9 +8,7 @@ Avoid callback hell with this ultra-simple wrapper for your functions.
 ```javascript
 var promise = require("yoyaku");
 
-var exists = promise(["exists","enoent"],existsInt);
 function existsInt(file,promises) {
-	
 	fs.stat(file,function(err,data) {
 		if (err) return promises.enoent();
 		
@@ -18,6 +16,7 @@ function existsInt(file,promises) {
 	});
 }
 
+var exists = promise(["exists","enoent"],existsInt);
 
 exists("./foo.txt")
 	.exists(successFunc)
