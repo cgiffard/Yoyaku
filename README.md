@@ -6,7 +6,7 @@ Avoid callback hell with this ultra-simple wrapper for your functions.
 ### Example
 
 ```javascript
-var p = require("yoyaku");
+var promise = require("yoyaku");
 
 var exists = promise(["exists","enoent"],existsInt);
 function existsInt(file,promises) {
