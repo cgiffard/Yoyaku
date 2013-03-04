@@ -1,0 +1,28 @@
+{
+  "name": "yoyaku",
+  "version": "0.0.1",
+  "description": "Easily create promise-like APIs. Extremely simple wrapper.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cgiffard/Yoyaku.git"
+  },
+  "keywords": [
+    "promise",
+    "contract",
+    "yakusoku",
+    "yoyaku",
+    "promises",
+    "callback",
+    "callbackhell",
+    "hell"
+  ],
+  "author": [
+    "Christopher Giffard <christopher.giffard@cgiffard.com>",
+    "cgiffard <christopher.giffard@cgiffard.com>",
+  ],
+  "license": "BSD"
+}
