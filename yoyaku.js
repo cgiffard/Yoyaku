@@ -40,6 +40,30 @@
 		};
 	}
 	
+	// Simple function to easily promise-ify node's (and other libraries')
+	// first-arg--is-err-or-it-was-a-great-success type callbacks
+	yoyaku.yepnope = function(func,objectRef) {
+		return yoyaku(["yep","nope"],function() {
+			var args		= [].slice.call(arguments,0),
+				inputs		= args.slice(0,args.length-2),
+				promises	= args.pop();
+			
+			args.push(function(err) {
+				if (err) return promises.nope(err);
+				
+				// If it worked, we pass through everything except the null
+				// error argument.
+				promises.yep.apply([].slice.call(arguments,1));
+			});
+			
+			try {
+				func.apply(objectRef,args);
+			} catch(err) {
+				promises.nope(err);
+			}
+		});
+	};
+	
 	// Publish existence of object
 	if (typeof module !== "undefined" && module.exports) {
 		module.exports = yoyaku;

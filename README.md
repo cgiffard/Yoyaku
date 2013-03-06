@@ -2,8 +2,33 @@ Yoyaku
 ======
 
 Avoid callback hell with this ultra-simple wrapper for your functions.
+Easily streamline node's first-argument-as-error style callback functions.
 
-### Example
+### Example 1
+
+In one line of code, turn node's fs.stat into a promise-like API! Toss `if (err)`
+to the curb!
+
+```javascript
+
+var promise = require("yoyaku");
+
+var exists = promise.yepnope(fs.stat);
+
+// Now, use it!
+exists("foo.txt")
+	.nope(function() {
+		console.log("No - we'd better create that file!");
+	})
+	.yep(function() {
+		console.log("Yeah my file exists!");
+	})
+
+```
+
+### Example 2
+
+The more flexible method that allows *any* function to be wrapped:
 
 ```javascript
 var promise = require("yoyaku");
