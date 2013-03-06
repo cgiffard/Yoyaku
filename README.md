@@ -3,6 +3,8 @@ Yoyaku
 
 Avoid callback hell with this ultra-simple wrapper for your functions.
 Easily streamline node's first-argument-as-error style callback functions.
+*Serving suggestion*: combine with [async](http://github.com/caolan/async) for
+added flavour.
 
 ### Example 1
 
