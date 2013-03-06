@@ -53,7 +53,7 @@
 				
 				// If it worked, we pass through everything except the null
 				// error argument.
-				promises.yep.apply([].slice.call(arguments,1));
+				promises.yep.apply(promises,[].slice.call(arguments,1));
 			});
 			
 			try {
