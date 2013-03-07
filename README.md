@@ -121,7 +121,7 @@ Take this example for instance:
 
 ```javascript
 
-var yoyaky	= require("yoyaku"),
+var yoyaku	= require("yoyaku"),
 	mkdirp	= yoyaku.yepnope(require("mkdirp")),
 	exists	= yoyaku.yepnope(require("fs").stat);
 
