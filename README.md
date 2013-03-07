@@ -1,9 +1,11 @@
 Yoyaku
 ======
 
-Avoid callback hell with this ultra-simple wrapper for your functions.
-Easily streamline node's first-argument-as-error style callback functions. Yoyaku
-can even automatically wrap entire APIs, such as node's `fs`.
+*	Avoid callback hell with this ultra-simple wrapper for your functions.
+*	Easily streamline node's first-argument-as-error style callbacks.
+*	Automatically wrap entire APIs, such as node's `fs`.
+*	Delayed execution: passing a function call without ugly `function(){}` syntax.
+	(See [example](#delayed-execution))
 
 *Serving suggestion*: combine with [async](http://github.com/caolan/async) for
 added flavour (see [recipe](#async).)
@@ -108,6 +110,57 @@ function somethingToDoWhenFinished() {
 }
 
 ```
+
+### Delayed execution
+
+Delayed execution lets you omit function-expression syntax when passing wrapped
+functions as callbacks. Instead of calling the function directly, call `.delay`
+on it and pass in the arguments you normally would.
+
+Take this example for instance:
+
+```javascript
+
+var yoyaky	= require("yoyaku"),
+	mkdirp	= yoyaku.yepnope(require("mkdirp")),
+	exists	= yoyaku.yepnope(require("fs").stat);
+
+function createDirIfMissing(path,callback) {
+	exists(path)
+		.yep(callback)
+		.nope(
+			mkdirp.delay(path)
+				.yep(callback));
+}
+```
+
+The function simply takes a filepath, and creates the directory specified by the
+path if it does not already exist. Writing the function without delayed execution
+and Yoyaku would look like:
+
+```javascript
+
+var mkdirp	= require("mkdirp"),
+	fs		= require("fs");
+
+function createDirIfMissing(path,callback) {
+	fs.stat(path,function(err) {
+		if (!err) return callback();
+		
+		mkdirp(path,function(err) {
+			if (err) throw err;
+			
+			callback();
+		});
+	});
+}
+```
+
+It's not the reduced line count (5 vs 7 SLOC) that is the main factor in Yoyaku's
+favour - rather the terseness of the code, and the lack of non-specific cruft,
+like handlers for error callbacks and function expressions. This has let me be
+more expressive and feel less hindered by *callback-coding* in my own work. I hope
+it works for you too.
 
 ### Function Reference
 

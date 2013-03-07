@@ -1,7 +1,7 @@
 {
   "name": "yoyaku",
-  "version": "0.0.5",
-  "description": "Easily create promise-like APIs. Extremely simple wrapper.",
+  "version": "0.0.6",
+  "description": "Easily create promise-like APIs with this simple wrapper.",
   "main": "yoyaku.js",
   "scripts": {
     "test": "mocha -R spec"

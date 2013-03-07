@@ -9,7 +9,7 @@
 
 	// Expects the first parameter to be an array of promise names
 	function yoyaku(promises,wrappedFunc) {
-
+		
 		var defaultFunctionMap = {}, promiseArr = [];
 
 		// Has the user specified an array with default
@@ -25,35 +25,63 @@
 			promises = promiseArr;
 		}
 
-		return function() {
-
+		var retFunc = function() {
+			
 			var promiseMap = {},
 				returnedPromiseMap = {};
-
+			
 			promises.forEach(function(promise) {
-
+				
 				promiseMap[promise] =
 					(defaultFunctionMap[promise] || function() {});
-
+				
 				returnedPromiseMap[promise] = function(funcIn) {
 					if (funcIn instanceof Function) {
 						promiseMap[promise] = funcIn;
 						return returnedPromiseMap;
 					}
-
+		
 					// We didn't get a function?
 					throw new Error("Promises expect a function.");
 				}
-
+		
 			});
-
+		
 			var args = [].slice.call(arguments,0);
 				args.push(promiseMap);
-
+		
 			wrappedFunc.apply(wrappedFunc,args);
-
+		
 			return returnedPromiseMap;
 		};
+		
+		retFunc.delay = function() {
+			var args = [].slice.call(arguments,0),
+				promiseCache = {};
+				
+			var delayCallback = function() {
+				args = args.concat([].slice.call(arguments,0));
+				var promiseObject = retFunc.apply(null,args);
+				
+				promiseArr.forEach(function(promise) {
+					if (promiseCache[promise] instanceof Function)
+						promiseObject[promise](promiseCache[promise]);
+				});
+				
+				return promiseObject;
+			};
+			
+			promiseArr.forEach(function(promise) {
+				delayCallback[promise] = function(funcIn) {
+					promiseCache[promise] = funcIn;
+					return delayCallback;
+				};
+			});
+			
+			return delayCallback;
+		};
+		
+		return retFunc;
 	}
 
 	// Simple function to easily promise-ify node's (and other libraries')
