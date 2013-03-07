@@ -109,16 +109,16 @@ function somethingToDoWhenFinished() {
 
 ```
 
-## Function Reference
+### Function Reference
 
-### `yoyaku(promiseArray,function)`
+#### `yoyaku(promiseArray,function)`
 
 Wraps a single function in another function that manages promises and callbacks.
 Passes all the arguments the wrapper function was called with through to the
 wrapped function, but adds an additional argument on the end: an map of functions
 named according to the array which was passed to `yoyaku` when it was invoked.
 
-### `yoyaku.yepnope(function, [callwith])`
+#### `yoyaku.yepnope(function, [callwith])`
 
 Automatically converts node-style callback APIs (callback as last parameter, error
 condition passed as first parameter to callback if applicable) to a promise-like API.
@@ -129,7 +129,7 @@ If you do not specify a handler for `.nope`, it will throw an exception should t
 method fail. This is desirable behaviour (there's nothing worse than invisible errors
 quietly multiplying inside a program!)
 
-### `yoyaku.api(object)`
+#### `yoyaku.api(object)`
 
 Runs `yoyaku.yepnope` against every function parameter of an object, and saves the
 newly wrapped functions on a new object. Essentially this converts an entire API
