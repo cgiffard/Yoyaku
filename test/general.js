@@ -32,4 +32,44 @@ describe("Yoyaku",function() {
 		promiseReturned.p2(funcCallback);
 	});
 	
+	it("should be able to wrap fs.readFile with yepnope",function(done) {
+		var promise = require(__dirname + "/../yoyaku.js");
+		
+		var read = promise.yepnope(require("fs").readFile);
+		
+		read.should.be.a("function");
+		
+		read(__dirname + "/../package.json")
+			.yep(function(data) {
+				if (data) return done();
+				throw new Error("Data field was empty.");
+			});
+	});
+	
+	it("should be able to catch errors with yepnope",function(done) {
+		var promise = require(__dirname + "/../yoyaku.js");
+		
+		var read = promise.yepnope(require("fs").readFile);
+		
+		read(__dirname + Math.random())
+			.nope(function(err) {
+				err.should.be.an("error");
+				done();
+			});
+	});
+	
+	it("should be able to yepnope-wrap an API object",function(done) {
+		var promise	= require(__dirname + "/../yoyaku.js"),
+			fs		= promise.api(require("fs")),
+			read	= fs.readFile;
+		
+		read.should.be.a("function");
+		
+		read(__dirname + "/../package.json")
+			.yep(function(data) {
+				if (data) return done();
+				throw new Error("Data field was empty.");
+			});
+	});
+	
 });

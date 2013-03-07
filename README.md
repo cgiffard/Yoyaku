@@ -2,9 +2,11 @@ Yoyaku
 ======
 
 Avoid callback hell with this ultra-simple wrapper for your functions.
-Easily streamline node's first-argument-as-error style callback functions.
+Easily streamline node's first-argument-as-error style callback functions. Yoyaku
+can even automatically wrap entire APIs, such as node's `fs`.
+
 *Serving suggestion*: combine with [async](http://github.com/caolan/async) for
-added flavour.
+added flavour (see [recipe](#async).)
 
 ### Example 1
 
@@ -13,9 +15,9 @@ to the curb!
 
 ```javascript
 
-var promise = require("yoyaku");
+var yoyaku = require("yoyaku");
 
-var exists = promise.yepnope(fs.stat);
+var exists = yoyaku.yepnope(require("fs").stat);
 
 // Now, use it!
 exists("foo.txt")
@@ -33,7 +35,7 @@ exists("foo.txt")
 The more flexible method that allows *any* function to be wrapped:
 
 ```javascript
-var promise = require("yoyaku");
+var yoyaku = require("yoyaku");
 
 function existsInt(file,promises) {
 	fs.stat(file,function(err,data) {
@@ -43,11 +45,26 @@ function existsInt(file,promises) {
 	});
 }
 
-var exists = promise(["exists","enoent"],existsInt);
+var exists = yoyaku(["exists","enoent"],existsInt);
 
 exists("./foo.txt")
 	.exists(successFunc)
 	.enoent(failFunc);
+```
+
+### Example 3
+
+Automatically wrapping an entire API for easy promisey access:
+
+```javascript
+var yoyaku	= require("yoyaku"),
+	fs		= yoyaku.api(require("fs"));
+
+fs.readFile("foo.txt")
+	.yep(function(data) {
+		// do something with the file data
+	});
+
 ```
 
 ### Installing
@@ -64,6 +81,59 @@ techniques, it'll certainly help.
 `Yoyaku` does not mean promise in Japanese - it means 'reservation', 'contract',
 or 'agreement'. Since this isn't strictly a *promise* API, rather, a *promise-like*
 API, I decided to use a promise-like word to describe it. Hence, yoyaku.
+
+### Async
+
+I find this makes async much more palatable. This is a very small example that I
+think demonstrates how Yoyaku cleans up the callback syntax.
+
+```javascript
+
+var yoyaku	= require("yoyaku"),
+	async	= yoyaku.api(require("async")),
+	fs		= require("fs"),
+	write	= yoyaku.yepnope(fs.writeFile),
+	each	= async.each;
+
+files = [ "foo.txt", "bar.txt", "baz.txt" ];
+
+each(files,fs.readFile)
+	.yep(function(data) {
+		write("combined.txt",data.join("\n"))
+			.yep(somethingToDoWhenFinished);
+	});
+
+function somethingToDoWhenFinished() {
+	console.log("It all worked awesomely!")
+}
+
+```
+
+## Function Reference
+
+### `yoyaku(promiseArray,function)`
+
+Wraps a single function in another function that manages promises and callbacks.
+Passes all the arguments the wrapper function was called with through to the
+wrapped function, but adds an additional argument on the end: an map of functions
+named according to the array which was passed to `yoyaku` when it was invoked.
+
+### `yoyaku.yepnope(function, [callwith])`
+
+Automatically converts node-style callback APIs (callback as last parameter, error
+condition passed as first parameter to callback if applicable) to a promise-like API.
+
+The returned promises are `.yep` and `.nope`, hence the name of the method.
+
+If you do not specify a handler for `.nope`, it will throw an exception should the
+method fail. This is desirable behaviour (there's nothing worse than invisible errors
+quietly multiplying inside a program!)
+
+### `yoyaku.api(object)`
+
+Runs `yoyaku.yepnope` against every function parameter of an object, and saves the
+newly wrapped functions on a new object. Essentially this converts an entire API
+to a promise-like interface.
 
 ### Testing
 
