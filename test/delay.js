@@ -31,7 +31,7 @@ describe("Delayed execution",function() {
 		var promise = require(__dirname + "/../yoyaku.js");
 		
 		function exampleFunction(callbackIn) {
-			callbackIn(3);
+			callbackIn();
 		}
 		
 		function exampleCallback(arg1,arg2,arg3,callback) {
@@ -45,7 +45,7 @@ describe("Delayed execution",function() {
 		// Doesn't have to be yepnope - could be something else.
 		var example = promise.yepnope(exampleCallback);
 		
-		exampleFunction(example.delay(1,2));
+		exampleFunction(example.delay(1,2,3));
 		
 	});
 	
@@ -54,7 +54,7 @@ describe("Delayed execution",function() {
 		var promise = require(__dirname + "/../yoyaku.js");
 		
 		function exampleFunction(callbackIn) {
-			callbackIn(3);
+			callbackIn();
 		}
 		
 		function exampleCallback(arg1,arg2,arg3,callback) {
@@ -67,7 +67,7 @@ describe("Delayed execution",function() {
 		var example = promise.yepnope(exampleCallback);
 		
 		exampleFunction(
-			example.delay(1,2)
+			example.delay(1,2,3)
 				.yep(done));
 		
 	});
