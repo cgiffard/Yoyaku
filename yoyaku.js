@@ -65,11 +65,11 @@
 			return returnedPromiseMap;
 		};
 
-		retFunc.delay = function() {
+		retFunc.defer = function() {
 			var args = [].slice.call(arguments,0),
 				promiseCache = {};
 
-			var delayCallback = function() {
+			var deferCallback = function() {
 				var promiseObject = retFunc.apply(null,args);
 
 				promiseArr.forEach(function(promise) {
@@ -81,13 +81,13 @@
 			};
 
 			promiseArr.forEach(function(promise) {
-				delayCallback[promise] = function(funcIn) {
+				deferCallback[promise] = function(funcIn) {
 					promiseCache[promise] = funcIn;
-					return delayCallback;
+					return deferCallback;
 				};
 			});
 
-			return delayCallback;
+			return deferCallback;
 		};
 
 		return retFunc;

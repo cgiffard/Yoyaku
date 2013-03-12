@@ -4,8 +4,8 @@ Yoyaku
 *	Avoid callback hell with this ultra-simple wrapper for your functions.
 *	Easily streamline node's first-argument-as-error style callbacks.
 *	Automatically wrap entire APIs, such as node's `fs`.
-*	Delayed execution: passing a function call without ugly `function(){}` syntax.
-	(See [example](#delayed-execution))
+*	Deferred execution: passing a function call without ugly `function(){}` syntax.
+	(See [example](#deferred-execution))
 
 *Serving suggestion*: combine with [async](http://github.com/caolan/async) for
 added flavour (see [recipe](#async).)
@@ -111,10 +111,10 @@ function somethingToDoWhenFinished() {
 
 ```
 
-### Delayed execution
+### Deferred execution
 
-Delayed execution lets you omit function-expression syntax when passing wrapped
-functions as callbacks. Instead of calling the function directly, call `.delay`
+Deferred execution lets you omit function-expression syntax when passing wrapped
+functions as callbacks. Instead of calling the function directly, call `.defer`
 on it and pass in the arguments you normally would.
 
 Take this example for instance:
@@ -129,13 +129,13 @@ function createDirIfMissing(path,callback) {
 	exists(path)
 		.yep(callback)
 		.nope(
-			mkdirp.delay(path)
+			mkdirp.defer(path)
 				.yep(callback));
 }
 ```
 
 The function simply takes a filepath, and creates the directory specified by the
-path if it does not already exist. Writing the function without delayed execution
+path if it does not already exist. Writing the function without deferred execution
 and Yoyaku would look like:
 
 ```javascript
