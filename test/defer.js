@@ -1,7 +1,7 @@
 var chai = require("chai");
 	chai.should();
 
-describe("Delayed execution",function() {
+describe("Deferred execution",function() {
 
 	it("should be runnable without error",function(done) {
 		
@@ -17,12 +17,12 @@ describe("Delayed execution",function() {
 		
 		var example = promise.yepnope(exampleCallback);
 		
-		example.delay.should.be.a("function");
-		example.delay().should.be.a("function");
-		example.delay().yep.should.be.a("function");
-		example.delay().nope.should.be.a("function");
+		example.defer.should.be.a("function");
+		example.defer().should.be.a("function");
+		example.defer().yep.should.be.a("function");
+		example.defer().nope.should.be.a("function");
 		
-		exampleFunction(example.delay());
+		exampleFunction(example.defer());
 		
 	});
 	
@@ -45,7 +45,7 @@ describe("Delayed execution",function() {
 		// Doesn't have to be yepnope - could be something else.
 		var example = promise.yepnope(exampleCallback);
 		
-		exampleFunction(example.delay(1,2,3));
+		exampleFunction(example.defer(1,2,3));
 		
 	});
 	
@@ -67,7 +67,7 @@ describe("Delayed execution",function() {
 		var example = promise.yepnope(exampleCallback);
 		
 		exampleFunction(
-			example.delay(1,2,3)
+			example.defer(1,2,3)
 				.yep(done));
 		
 	});
