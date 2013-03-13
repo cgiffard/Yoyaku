@@ -72,4 +72,25 @@ describe("Deferred execution",function() {
 		
 	});
 	
+	it("should maintain availability of promise callbacks on non-yepnope functions",function(done) {
+		
+		var promise = require(__dirname + "/../yoyaku.js");
+		
+		var myFunc = promise(["promise1","promise2"],function(stuff,promises) {
+			if (stuff) return promises.promise1();
+			promises.promise2();
+		});
+		
+		// This is a bit ugly. You wouldn't write a defer like an IIFE
+		// in real life.
+		myFunc.defer(true)
+			.promise1(function() {
+				myFunc.defer(false)
+					.promise2(function() {
+						done();
+					})();
+			})();
+		
+	});
+	
 });

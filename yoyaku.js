@@ -31,6 +31,9 @@
 			}
 
 			promises = promiseArr;
+			
+		} else if (promises instanceof Array) {
+			promiseArr = promises;
 		}
 
 		var retFunc = function() {
