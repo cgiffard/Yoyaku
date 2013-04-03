@@ -1,6 +1,6 @@
 {
   "name": "yoyaku",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Easily create promise-like APIs with this simple wrapper.",
   "main": "yoyaku.js",
   "scripts": {

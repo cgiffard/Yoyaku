@@ -72,4 +72,18 @@ describe("Yoyaku",function() {
 			});
 	});
 	
+	it("should preserve the `this` context of wrapped functions",function() {
+		var promise	= require(__dirname + "/../yoyaku.js"),
+			myProtoObj = function() {
+				this.testValue123 = "abc";
+			};
+		
+		myProtoObj.prototype.wrapped = promise(["abc"],function() {
+			this.testValue123.should.equal("abc");
+		});
+		
+		var myNewObj = new myProtoObj();
+			myNewObj.wrapped();
+	});
+	
 });

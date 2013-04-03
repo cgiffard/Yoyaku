@@ -31,14 +31,15 @@
 			}
 
 			promises = promiseArr;
-			
+
 		} else if (promises instanceof Array) {
 			promiseArr = promises;
 		}
 
 		var retFunc = function() {
 
-			var promiseMap = {},
+			var context = this,
+				promiseMap = {},
 				returnedPromiseMap = {};
 
 			promises.forEach(function(promise) {
@@ -62,7 +63,7 @@
 				args.push(promiseMap);
 
 			wait(function() {
-				wrappedFunc.apply(wrappedFunc,args);
+				wrappedFunc.apply(context,args);
 			});
 
 			return returnedPromiseMap;
