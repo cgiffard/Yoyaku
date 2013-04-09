@@ -188,7 +188,7 @@ Runs `yoyaku.yepnope` against every function parameter of an object, and saves t
 newly wrapped functions on a new object. Essentially this converts an entire API
 to a promise-like interface.
 
-#### `wrappedFunction.last`
+#### `wrappedFunction.last` (experimental)
 
 Contains a reference to the returned promise map generated the last time the
 wrapped function was called. This enables greater brevity, but potentially enables
