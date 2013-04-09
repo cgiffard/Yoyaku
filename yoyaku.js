@@ -66,6 +66,8 @@
 				wrappedFunc.apply(context,args);
 			});
 
+			retFunc.last = returnedPromiseMap;
+
 			return returnedPromiseMap;
 		};
 
@@ -103,18 +105,24 @@
 		function yepnopeCallback() {
 			var args		= [].slice.call(arguments,0),
 				inputs		= args.slice(0,args.length-1),
-				promises	= args.pop();
+				promises	= args.pop(),
+				context		= this;
 
-			args.push(function(err) {
+			var callback = function(err) {
 				if (err) return promises.nope(err);
 
 				// If it worked, we pass through everything except the null
 				// error argument.
 				promises.yep.apply(promises,[].slice.call(arguments,1));
-			});
+			};
+
+			callback.nope = promises.nope;
+			callback.yep = promises.yep;
+
+			args.push(callback);
 
 			try {
-				func.apply(objectRef,args);
+				func.apply((objectRef||context),args);
 			} catch(err) {
 				promises.nope(err);
 			}

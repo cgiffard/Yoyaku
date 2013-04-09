@@ -188,6 +188,23 @@ Runs `yoyaku.yepnope` against every function parameter of an object, and saves t
 newly wrapped functions on a new object. Essentially this converts an entire API
 to a promise-like interface.
 
+#### `wrappedFunction.last`
+
+Contains a reference to the returned promise map generated the last time the
+wrapped function was called. This enables greater brevity, but potentially enables
+race conditions where the wrapped function might be used simultaneously somewhere else.
+
+```javascript
+
+yoyaku.yepnope(fs.stat);
+
+fs.stat("myfile");
+
+// do something else
+
+fs.stat.last.yep(function() {});
+```
+
 ### Testing
 
 	npm test
