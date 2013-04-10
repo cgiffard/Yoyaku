@@ -4,6 +4,7 @@ Yoyaku
 *	Avoid callback hell with this ultra-simple wrapper for your functions.
 *	Easily streamline node's first-argument-as-error style callbacks.
 *	Automatically wrap entire APIs, such as node's `fs`.
+*	Allows easy currying of functions to an arbitrarily defined depth
 *	Deferred execution: passing a function call without ugly `function(){}` syntax.
 	(See [example](#deferred-execution))
 
@@ -188,11 +189,30 @@ Runs `yoyaku.yepnope` against every function parameter of an object, and saves t
 newly wrapped functions on a new object. Essentially this converts an entire API
 to a promise-like interface.
 
+#### `wrappedFunction.defer( ...arguments... )`
+
+Defers execution of the function as described in the [deferred execution](#deferred-execution)
+section of the document above. Takes an arbitrary list of arguments and stores/caches
+them against a function which it then returns. Executing this returned function will
+in turn execute the originally wrapped function with these arguments.
+
+This function actually calls `wrappedFunction.curry(0, [args])` behind the scenes.
+
+#### `wrappedFunction.curry(requiredArgumentCount, [...arguments...] )`
+
+Curries the wrapped function. The first parameter tells Yoyaku how many arguments
+to require before the wrapped function is executed. Any successive parameters are
+cached, and passed to the final function in order.
+
+Until the required number of parameters has been reached or exceeded, Yoyaku will
+return a function, which has promise setters available as object methods.
+
 #### `wrappedFunction.last` (experimental)
 
 Contains a reference to the returned promise map generated the last time the
-wrapped function was called. This enables greater brevity, but potentially enables
-race conditions where the wrapped function might be used simultaneously somewhere else.
+wrapped function was called, deferred, or curried. This enables greater brevity,
+but potentially enables race conditions where the wrapped function might be used
+simultaneously somewhere else. Use only where you can guarantee linear execution.
 
 ```javascript
 

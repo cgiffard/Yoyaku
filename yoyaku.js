@@ -71,12 +71,25 @@
 			return returnedPromiseMap;
 		};
 
-		retFunc.defer = function() {
-			var args = [].slice.call(arguments,0),
+		// Curry collects arguments every time the function is executed,
+		// until it reaches the initially specified threshold, then executes
+		// the wrapped function with those arguments.
+		retFunc.curry = function(requiredArgCount) {
+			var collectedArgs = [].slice.call(arguments,1),
 				promiseCache = {};
 
-			var deferCallback = function() {
-				var promiseObject = retFunc.apply(null,args);
+			var curryCallback = function() {
+
+				// Append all the new arguments we've gotten.
+				collectedArgs =
+					collectedArgs.concat([].slice.call(arguments,0));
+
+				// If we haven't got our required number of args yet...
+				if (collectedArgs.length < requiredArgCount)
+					return curryCallback;
+
+				// Or continue and execute the function.
+				var promiseObject = retFunc.apply(null,collectedArgs);
 
 				promiseArr.forEach(function(promise) {
 					if (promiseCache[promise] instanceof Function)
@@ -87,13 +100,21 @@
 			};
 
 			promiseArr.forEach(function(promise) {
-				deferCallback[promise] = function(funcIn) {
+				curryCallback[promise] = function(funcIn) {
 					promiseCache[promise] = funcIn;
-					return deferCallback;
+					return curryCallback;
 				};
 			});
 
-			return deferCallback;
+			retFunc.last = curryCallback;
+
+			return curryCallback;
+		};
+
+		// Defer execution.
+		retFunc.defer = function() {
+			return retFunc.curry
+				.apply(null,[0].concat([].slice.call(arguments,0)));
 		};
 
 		return retFunc;
