@@ -10,7 +10,7 @@
 	// Function for decoupling execution of the wrapped function from the
 	// runlloop, giving time for promises to be set, both in the browser & node
 	var wait = 
-		(process && process.nextTick) ? process.nextTick :
+		(typeof process !== "undefined" && process.nextTick) ? process.nextTick :
 		function(inFunc) {
 			setTimeout(inFunc,0);
 		};
